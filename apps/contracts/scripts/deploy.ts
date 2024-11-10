@@ -20,7 +20,7 @@ async function main() {
     vanity: '0x92e9',
     encodedArgs,
     contractName,
-    caseSensitive: false,
+    caseSensitive: true,
     startingIteration: 0,
   })
 

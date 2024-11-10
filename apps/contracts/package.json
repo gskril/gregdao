@@ -6,8 +6,7 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "prettier": "prettier --write .",
-    "deploy:base": "hardhat run scripts/deploy.ts --network base",
-    "deploy:baseSepolia": "hardhat run scripts/deploy.ts --network baseSepolia",
+    "deploy:mainnet": "hardhat run scripts/deploy.ts --network mainnet",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost"
   },
   "devDependencies": {
