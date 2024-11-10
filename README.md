@@ -1,3 +1,3 @@
-# Web3 Monorepo Template
+# GregDAO
 
-This is an opinionated monorepo template for web3 projects. It uses Hardhat for [smart contracts](./apps/contracts/README.md) and Next.js for the [web app](./apps/web/README.md).
+A fun home for all the Gregs in crypto. Anybody with a .eth name that includes "greg" can claim tokens.
