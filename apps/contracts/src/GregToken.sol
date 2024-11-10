@@ -107,12 +107,13 @@ contract GregToken is
         // Check if the name is a 2LD
         if (parts != 1) return false;
 
-        // Check if the TLD is .eth
-        Strings.slice memory tld = nameSlice.copy().split(delim);
-        if (!tld.equals("eth".toSlice())) return false;
-
         // Check if the name includes "greg"
         if (!nameSlice.contains(substringSlice)) return false;
+
+        // Check if the TLD is .eth
+        nameSlice.split(delim); // Drop the first part, leaving just the TLD
+        Strings.slice memory tld = nameSlice;
+        if (!tld.equals("eth".toSlice())) return false;
 
         return true;
     }

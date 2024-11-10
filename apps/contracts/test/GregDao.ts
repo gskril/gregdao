@@ -18,4 +18,24 @@ describe('Tests', function () {
     const contractName = await contract.read.name()
     expect(contractName).to.equal('Greg')
   })
+
+  it('should return true for eligible names', async function () {
+    const { contract } = await loadFixture(deploy)
+    const names = ['greg.eth', 'gregskril.eth', 'higreg.eth', 'agregb.eth']
+
+    for (const name of names) {
+      const isEligible = await contract.read.isEligible([name])
+      expect(isEligible).to.equal(true)
+    }
+  })
+
+  it('should return false for ineligible names', async function () {
+    const { contract } = await loadFixture(deploy)
+    const names = ['name.eth', 'sub.greg.eth', 'gregskril.com']
+
+    for (const name of names) {
+      const isEligible = await contract.read.isEligible([name])
+      expect(isEligible).to.equal(false)
+    }
+  })
 })
