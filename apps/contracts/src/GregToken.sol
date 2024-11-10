@@ -33,6 +33,7 @@ contract GregToken is
     error Unauthorized();
     error AlreadyClaimed();
     error ClaimClosed();
+
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
@@ -43,10 +44,12 @@ contract GregToken is
                                PARAMETERS
     //////////////////////////////////////////////////////////////*/
 
-    uint256 constant amountPerClaim = 10_000e18; // 10,000 tokens
-    ENS constant ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
-    INameWrapper immutable nameWrapper;
-    bool isClaimOpen = true;
+    bool public isClaimOpen = true;
+    uint256 public constant minimumMintInterval = 365 days;
+    ENS public constant ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
+
+    uint256 public nextMint; // Timestamp
+    INameWrapper public immutable nameWrapper;
 
     mapping(bytes dnsEncodedName => bool claimed) public claimedNames;
 
@@ -59,6 +62,7 @@ contract GregToken is
         address nameWrapperAddress
     ) ERC20("Greg", "GREG") Ownable(initialOwner) ERC20Permit("Greg") {
         nameWrapper = INameWrapper(nameWrapperAddress);
+        nextMint = block.timestamp + minimumMintInterval;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -66,11 +70,10 @@ contract GregToken is
     //////////////////////////////////////////////////////////////*/
 
     /**
-     * Mint tokens to the sender if they own an ENS name that starts with "greg"
-     *
+     * @dev Mint tokens to the sender if they own an ENS name that includes "greg".
      * @param name ENS name in full format, like "gregskril.eth"
      */
-    function claim(string calldata name) public {
+    function claim(string calldata name) external {
         if (!isClaimOpen) revert ClaimClosed();
         if (!isEligible(name)) revert IneligibleName();
 
@@ -92,11 +95,7 @@ contract GregToken is
         // Mint the tokens
         emit Claim(name, msg.sender);
         claimedNames[dnsEncodedName] = true;
-        _mint(msg.sender, amountPerClaim);
-    }
-
-    function closeClaim() public onlyOwner {
-        isClaimOpen = false;
+        _mint(msg.sender, 10_000e18); // 10k tokens
     }
 
     function isEligible(string calldata name) public pure returns (bool) {
@@ -122,15 +121,37 @@ contract GregToken is
                             ADMIN FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    function mint(address to, uint256 amount) public onlyOwner {
+    /**
+     * @dev Mints new tokens. Can only be executed once per year and cannot exceed 2% of the current supply.
+     * @param to The address to mint the new tokens to.
+     * @param amount The quantity of tokens to mint.
+     */
+    function mint(address to, uint256 amount) external onlyOwner {
+        uint256 mintCap = 500; // 5%
+
+        // Check that the mint amount is less than the mint cap
+        if (amount > (totalSupply() * mintCap) / 10000) {
+            revert Unauthorized();
+        }
+
+        // Check that the mint interval has passed
+        if (block.timestamp < nextMint) {
+            revert Unauthorized();
+        }
+
+        nextMint = block.timestamp + minimumMintInterval;
         _mint(to, amount);
     }
 
-    function pause() public onlyOwner {
+    function closeClaim() external onlyOwner {
+        isClaimOpen = false;
+    }
+
+    function pause() external onlyOwner {
         _pause();
     }
 
-    function unpause() public onlyOwner {
+    function unpause() external onlyOwner {
         _unpause();
     }
 
