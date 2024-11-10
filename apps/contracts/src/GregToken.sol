@@ -103,10 +103,10 @@ contract GregToken is
         Strings.slice memory nameSlice = name.toSlice();
         Strings.slice memory substringSlice = "greg".toSlice();
         Strings.slice memory delim = ".".toSlice();
-        uint256 parts = nameSlice.count(delim) + 1;
+        uint256 parts = nameSlice.count(delim);
 
         // Check if the name is a 2LD
-        if (parts != 2) return false;
+        if (parts != 1) return false;
 
         // Check if the TLD is .eth
         Strings.slice memory tld = nameSlice.copy().split(delim);
