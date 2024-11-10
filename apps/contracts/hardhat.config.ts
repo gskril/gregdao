@@ -4,19 +4,13 @@ import 'dotenv/config'
 import { HardhatUserConfig } from 'hardhat/config'
 
 const DEPLOYER_KEY = process.env.DEPLOYER_KEY
-const BASESCAN_API_KEY = process.env.BASESCAN_API_KEY
 
 if (!DEPLOYER_KEY) throw new Error('DEPLOYER_KEY must be set')
-if (!BASESCAN_API_KEY) throw new Error('BASESCAN_API_KEY must be set')
 
 const config: HardhatUserConfig = {
   networks: {
-    base: {
-      url: 'https://mainnet.base.org',
-      accounts: [DEPLOYER_KEY],
-    },
-    baseSepolia: {
-      url: 'https://sepolia.base.org',
+    mainnet: {
+      url: 'https://eth.drpc.org',
       accounts: [DEPLOYER_KEY],
     },
     localhost: {
@@ -38,8 +32,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      base: BASESCAN_API_KEY,
-      baseSepolia: BASESCAN_API_KEY,
+      mainnet: process.env.ETHERSCAN_API_KEY || '',
     },
   },
   paths: {

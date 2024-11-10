@@ -4,19 +4,20 @@ import { encodeAbiParameters } from 'viem/utils'
 import { generateSaltAndDeploy } from './lib/create2'
 
 async function main() {
-  const contractName = 'Contract'
+  const contractName = 'GregToken'
 
   const constructorArguments = [
-    'Contract', // _name
+    '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', // initialOwner (default hardhat account)
+    '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401', // nameWrapperAddress (mainnet deployment)
   ] as const
 
   const encodedArgs = encodeAbiParameters(
-    [{ type: 'string' }],
+    [{ type: 'address' }, { type: 'address' }],
     constructorArguments
   )
 
   const { address } = await generateSaltAndDeploy({
-    vanity: '0x000',
+    vanity: '0x92e9',
     encodedArgs,
     contractName,
     caseSensitive: false,
