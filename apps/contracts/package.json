@@ -27,6 +27,7 @@
     "viem": "^1.21.4"
   },
   "dependencies": {
+    "@ensdomains/ens-contracts": "^1.2.2",
     "@openzeppelin/contracts": "^5.0.2"
   }
 }
