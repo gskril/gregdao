@@ -8,11 +8,10 @@ async function main() {
 
   const constructorArguments = [
     '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', // initialOwner (default hardhat account)
-    '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401', // nameWrapperAddress (mainnet deployment)
   ] as const
 
   const encodedArgs = encodeAbiParameters(
-    [{ type: 'address' }, { type: 'address' }],
+    [{ type: 'address' }],
     constructorArguments
   )
 
