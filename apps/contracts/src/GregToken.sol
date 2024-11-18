@@ -123,7 +123,7 @@ contract GregToken is
     //////////////////////////////////////////////////////////////*/
 
     /**
-     * @dev Mints new tokens. Can only be executed once per year and cannot exceed 2% of the current supply.
+     * @dev Mints new tokens. Can only be executed once per year and cannot exceed 5% of the current supply.
      * @param to The address to mint the new tokens to.
      * @param amount The quantity of tokens to mint.
      */
