@@ -3,9 +3,9 @@ name: Smart Contracts
 on:
   push:
     branches: [main]
-    paths: ['apps/contracts/**']
+    paths: ['apps/contracts/**', '.github/workflows/contracts.yml']
   pull_request:
-    paths: ['apps/contracts/**']
+    paths: ['apps/contracts/**', '.github/workflows/contracts.yml']
 
 jobs:
   test:
@@ -22,7 +22,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '22.23.4'
           cache: 'pnpm'
 
       - name: Install dependencies in contracts package
